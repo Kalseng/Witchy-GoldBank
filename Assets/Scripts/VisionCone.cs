@@ -24,7 +24,7 @@ public class VisionCone : MonoBehaviour {
 			print (alertLevel);
 			if (alertLevel >= ALERT_THRESHOLD) {
 				print ("Suspicion level critical");
-
+				GameObject.Find ("GameManager").GetComponent<GameManager> ().GameOver ();
 			}
 		}
 	}
@@ -32,7 +32,7 @@ public class VisionCone : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D maybePlayer) {
 		// print ("Triggered");
 		// print (maybePlayer.transform.name);
-		if (maybePlayer.gameObject.CompareTag ("Player")) {
+		if (maybePlayer.gameObject.CompareTag ("Player") && !maybePlayer.isTrigger) {
 			seesPlayer = true;
 		}
 	}
