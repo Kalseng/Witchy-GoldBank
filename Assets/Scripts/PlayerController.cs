@@ -1,24 +1,44 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
 
 	public float movementModifier = 1.0f;
 
-	public ItemComponent currentlySelectedItem;
+	private GameObject currentlySelectedItem;
+	private GameObject currentlyHeldItem;
+	private ArrayList possibleItems;
+
+	private GameObject itemHolder;
+
+	private GameObject itemFolder;
 
 	// Use this for initialization
 	void Start () {
-	
+		possibleItems = new ArrayList ();
+		itemHolder = this.transform.FindChild ("ItemPosition").gameObject;
+		itemFolder = GameObject.Find ("ITEMS");
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		InputManager ();
+		ItemManager ();
 	}
 
 	void InputManager(){
 		MovementManager ();
+		if (Input.GetButtonDown ("Fire1")) {
+			if (currentlyHeldItem != null) {
+				currentlyHeldItem.transform.parent = itemFolder.transform;
+				currentlyHeldItem = null;
+			} else {
+				currentlyHeldItem = currentlySelectedItem;
+				currentlyHeldItem.transform.parent = itemHolder.transform;
+				currentlyHeldItem.transform.localPosition = new Vector3 (0, 0, 0);
+			}
+		}
 	}
 
 	void MovementManager(){
@@ -32,6 +52,43 @@ public class PlayerController : MonoBehaviour {
 			transform.rotation = Quaternion.AngleAxis (rotAngle, Vector3.forward);
 		} else {
 			this.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, 0, 0);
+		}// end movement axis if statement
+	}
+
+	void ItemManager(){
+		if (possibleItems.Count == 0) {
+			currentlySelectedItem = null;	
+			return;
+		}
+		if (possibleItems.Count == 1) {
+			currentlySelectedItem = possibleItems [0] as GameObject;
+			return;
+		} else {
+			GameObject closestItem = possibleItems[0] as GameObject;
+			float closestDist = 1000000;
+			foreach (GameObject obj in possibleItems) {
+				float currentDist = (this.transform.position - obj.transform.position).sqrMagnitude;
+				if (currentDist < closestDist) {
+					closestDist = currentDist;
+					currentlySelectedItem = obj;
+				}
+			}
+		}
+		if (currentlySelectedItem != null) {
+			Debug.Log (currentlySelectedItem.name);
 		}
 	}
+
+	void OnTriggerEnter2D(Collider2D col){
+		if (col.tag == "Item") {
+			possibleItems.Add (col.gameObject);
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D col){
+		if (col.tag == "Item") {
+			possibleItems.Remove (col.gameObject);
+		}
+	}
+
 }
