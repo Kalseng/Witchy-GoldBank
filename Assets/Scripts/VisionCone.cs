@@ -12,4 +12,9 @@ public class VisionCone : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	void OnTriggerEnter2D (Collider2D maybePlayer) {
+		print ("Triggered");
+		print (maybePlayer.transform.name);
+	}
 }
