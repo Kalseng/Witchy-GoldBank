@@ -70,9 +70,10 @@ public class PlayerController : MonoBehaviour {
 				float currentDist = (this.transform.position - obj.transform.position).sqrMagnitude;
 				if (currentDist < closestDist) {
 					closestDist = currentDist;
-					currentlySelectedItem = obj;
+					closestItem = obj;
 				}
 			}
+			currentlySelectedItem = closestItem;
 		}
 		if (currentlySelectedItem != null) {
 			Debug.Log (currentlySelectedItem.name);
