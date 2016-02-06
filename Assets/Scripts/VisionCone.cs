@@ -7,6 +7,7 @@ public class VisionCone : MonoBehaviour {
 	public double ALERT_MOD; // Scale factor for multiplying alert incrementation by
 	bool seesPlayer = false;
 	Transform player;
+	public GameObject alertSound;
 
 	// Use this for initialization
 	void Start () {
@@ -17,10 +18,14 @@ public class VisionCone : MonoBehaviour {
 	void Update () {
 		bool playerSuspicious = true; // will come from a variable in the player script
 		if (seesPlayer && playerSuspicious) {
+			if (alertLevel == 0) // if this is the first frame the player is detected
+				alertSound.GetComponent<AudioSource>().Play();
 			alertLevel += Time.deltaTime * ALERT_MOD / Mathf.Max((player.position - transform.position).magnitude,1);
 			print (alertLevel);
-			if (alertLevel >= ALERT_THRESHOLD)
+			if (alertLevel >= ALERT_THRESHOLD) {
 				print ("Suspicion level critical");
+
+			}
 		}
 	}
 
