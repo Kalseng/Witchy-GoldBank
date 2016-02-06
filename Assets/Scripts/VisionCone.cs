@@ -6,17 +6,17 @@ public class VisionCone : MonoBehaviour {
 	public double ALERT_THRESHOLD;
 	public double ALERT_MOD; // Scale factor for multiplying alert incrementation by
 	bool seesPlayer = false;
-	Transform player;
+	PlayerController player;
 	public GameObject alertSound;
 
 	// Use this for initialization
 	void Start () {
-		player = GameObject.FindWithTag ("Player").transform;
+		player = GameObject.FindWithTag ("Player").GetComponent<PlayerController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		bool playerSuspicious = true; // will come from a variable in the player script
+		bool playerSuspicious = player.IsSuspicious(); // will come from a variable in the player script
 		if (seesPlayer && playerSuspicious) {
 			if (alertLevel == 0) // if this is the first frame the player is detected
 				alertSound.GetComponent<AudioSource>().Play();
