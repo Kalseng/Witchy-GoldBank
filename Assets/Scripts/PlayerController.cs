@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	bool IsSuspicious(){
+	public bool IsSuspicious(){
 		if (currentlyHeldItem != null) {
 			return true;
 		}
