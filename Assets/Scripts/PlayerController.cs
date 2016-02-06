@@ -5,6 +5,8 @@ public class PlayerController : MonoBehaviour {
 
 	public float movementModifier = 1.0f;
 
+	public ItemComponent currentlySelectedItem;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -16,9 +18,20 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void InputManager(){
-		if (Input.GetAxis ("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {
-			Vector3 movement = new Vector3 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"), 0) * movementModifier;
-			this.GetComponent<Rigidbody2D>().velocity = movement;
+		MovementManager ();
+	}
+
+	void MovementManager(){
+		if (Input.GetAxisRaw ("Horizontal") != 0 || Input.GetAxisRaw ("Vertical") != 0) {
+			Vector3 movement = new Vector3 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"), 0);
+			movement.Normalize ();
+			movement = movement * movementModifier;
+			this.GetComponent<Rigidbody2D> ().velocity = movement;
+
+			float rotAngle = Mathf.Atan2 (movement.y, movement.x) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.AngleAxis (rotAngle, Vector3.forward);
+		} else {
+			this.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, 0, 0);
 		}
 	}
 }
