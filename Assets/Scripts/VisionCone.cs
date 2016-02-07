@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class VisionCone : MonoBehaviour {
-	double alertLevel = 0f;
+	private double alertLevel = 0f;
 	public double ALERT_THRESHOLD;
 	public double ALERT_MOD; // Scale factor for multiplying alert incrementation by
-	bool seesPlayer = false;
-	Transform player;
+	private bool seesPlayer = false;
+	private Transform player;
 	public GameObject alertSound;
 
 	// Use this for initialization
@@ -24,7 +24,7 @@ public class VisionCone : MonoBehaviour {
 			print (alertLevel);
 			if (alertLevel >= ALERT_THRESHOLD) {
 				print ("Suspicion level critical");
-
+				// game over!
 			}
 		}
 	}
