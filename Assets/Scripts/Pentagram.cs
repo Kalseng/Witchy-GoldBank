@@ -10,11 +10,13 @@ public class Pentagram : MonoBehaviour {
 	int[] itemValues = { 200, 150, 5 };
 
 	// Could be triggered by a bounds check when setting down an item
-	void addItem (GameObject item) {
+	public void addItem (GameObject item) {
+		// print ("adding item");
 		int itemID = getID (item);
 		itemQuantities [itemID]++;
 		GameObject.Find ("InGameGUI").GetComponent<InGameGUI> ().addGold (itemValues [itemID]);
-		Destroy (item);
+		item.tag = "Untagged";
+		item.AddComponent<Disappear> ();
 		if (checkForItemWin())
 			GameObject.Find ("GameManager").GetComponent<GameManager> ().WinRound ();
 	}
@@ -27,8 +29,13 @@ public class Pentagram : MonoBehaviour {
 		return true;
 	}
 
-	// not sure the best way to do this, maybe from the item GameObject's name?
+	// not sure the best way to do this
 	int getID(GameObject item) {
-		return 0;
+		for (int i = 0; i < itemNames.Length; i++) {
+			if (item.transform.name == itemNames [i])
+				return i;
+		}
+		return 0; // in case the item's name isn't found
 	}
+
 }

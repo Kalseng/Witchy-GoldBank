@@ -14,11 +14,16 @@ public class PlayerController : MonoBehaviour {
 
 	private GameObject itemFolder;
 
+	private GameObject pentagram;
+	private double minPentagramDistance;
+
 	// Use this for initialization
 	void Start () {
 		possibleItems = new ArrayList ();
 		itemHolder = this.transform.FindChild ("ItemPosition").gameObject;
 		itemFolder = GameObject.Find ("ITEMS");
+		pentagram = GameObject.Find ("Pentagram");
+		minPentagramDistance = pentagram.GetComponent<CircleCollider2D> ().radius;
 	}
 	
 	// Update is called once per frame
@@ -32,6 +37,10 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetButtonDown ("Fire1")) {
 			if (currentlyHeldItem != null) {
 				currentlyHeldItem.transform.parent = itemFolder.transform;
+
+				if ((pentagram.transform.position - currentlyHeldItem.transform.position).magnitude <= minPentagramDistance)
+					pentagram.GetComponent<Pentagram> ().addItem (currentlyHeldItem);
+				
 				currentlyHeldItem = null;
 			} else {
 				currentlyHeldItem = currentlySelectedItem;
