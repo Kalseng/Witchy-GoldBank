@@ -6,10 +6,13 @@ public class Disappear : MonoBehaviour {
 	private Vector3 originalScale;
 	private float DISAPPEAR_TIME = 1.0f;
 	private float timeLeft;
+	public bool lastOne;
 
 	void Start () {
 		timeLeft = DISAPPEAR_TIME;
 		originalScale = transform.localScale;
+		gameObject.tag = "Untagged";
+		Destroy (GetComponent<Collider2D> ());
 	}
 
 	void Update () {

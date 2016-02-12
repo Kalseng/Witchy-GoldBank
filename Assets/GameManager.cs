@@ -24,12 +24,12 @@ public class GameManager : MonoBehaviour {
 	}
 
 	// to be called after level is loaded?
-	public void StartRound(int startGold) {
+	public void StartRound(int startGold, int endGold) {
 		// GUI code may be better located elsewhere, I just made a prefab with a separate script for now
-		GameObject gui = Instantiate (Resources.Load ("InGameGUI")) as GameObject;
-		gui.name = "InGameGUI";
-		InGameGUI guiCode = gui.GetComponent<InGameGUI> ();
-		guiCode.gold = startGold;
-		guiCode.mode = "roundstart";
+		/*GameObject gui = Instantiate (Resources.Load ("InGameGUI")) as GameObject;
+		gui.name = "InGameGUI";*/
+		InGameGUI guiCode = GameObject.Find("InGameGUI").GetComponent<InGameGUI> ();
+		guiCode.neededGold = endGold;
+		guiCode.addGold (startGold);
 	}
 }

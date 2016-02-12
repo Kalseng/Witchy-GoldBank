@@ -38,13 +38,28 @@ public class PlayerController : MonoBehaviour {
 			if (currentlyHeldItem != null) {
 				currentlyHeldItem.transform.parent = itemFolder.transform;
 
-				if ((pentagram.transform.position - currentlyHeldItem.transform.position).magnitude <= minPentagramDistance)
+				if ((pentagram.transform.position - currentlyHeldItem.transform.position).magnitude <= minPentagramDistance) {
 					pentagram.GetComponent<Pentagram> ().addItem (currentlyHeldItem);
+					possibleItems.Remove (currentlyHeldItem);
+					possibleItems.Remove (currentlyHeldItem); // since the held object is in the array twice for some reason at this point
+					currentlySelectedItem = null;
+				} else {
+					Rigidbody2D itemRigidbody = currentlyHeldItem.GetComponent<Rigidbody2D> ();
+					if (itemRigidbody)
+						itemRigidbody.isKinematic = false;
+					currentlyHeldItem.GetComponent<Collider2D> ().isTrigger = false;
+				}
 				
 				currentlyHeldItem = null;
 			} else {
 				currentlyHeldItem = currentlySelectedItem;
 				currentlyHeldItem.transform.parent = itemHolder.transform;
+
+				Rigidbody2D itemRigidbody = currentlyHeldItem.GetComponent<Rigidbody2D> ();
+				if (itemRigidbody)
+					itemRigidbody.isKinematic = true;
+				currentlyHeldItem.GetComponent<Collider2D> ().isTrigger = true;
+
 				currentlyHeldItem.transform.localPosition = new Vector3 (0, 0, 0);
 			}
 		}
