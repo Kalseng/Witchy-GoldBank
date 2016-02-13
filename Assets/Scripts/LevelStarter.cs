@@ -6,6 +6,6 @@ public class LevelStarter : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GameObject.Find ("GameManager").GetComponent<GameManager> ().StartRound (1000, 1355);
+		GameObject.Find ("GameManager").GetComponent<GameManager> ().StartRound (1000, 1039);
 	}
 }

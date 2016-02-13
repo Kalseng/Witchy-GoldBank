@@ -37,30 +37,29 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetButtonDown ("Fire1")) {
 			if (currentlyHeldItem != null) {
 				currentlyHeldItem.transform.parent = itemFolder.transform;
+				while (possibleItems.Contains(currentlyHeldItem)) // in case the item is in possibleItems multiple times (bugfix)
+					possibleItems.Remove (currentlyHeldItem);
+				Item properties = currentlyHeldItem.GetComponent<Item> ();
+				if (properties)
+					movementModifier /= properties.speedMod;
 
 				if ((pentagram.transform.position - currentlyHeldItem.transform.position).magnitude <= minPentagramDistance) {
 					pentagram.GetComponent<Pentagram> ().addItem (currentlyHeldItem);
-					possibleItems.Remove (currentlyHeldItem);
-					possibleItems.Remove (currentlyHeldItem); // since the held object is in the array twice for some reason at this point
 					currentlySelectedItem = null;
 				} else {
-					Rigidbody2D itemRigidbody = currentlyHeldItem.GetComponent<Rigidbody2D> ();
-					if (itemRigidbody)
-						itemRigidbody.isKinematic = false;
 					currentlyHeldItem.GetComponent<Collider2D> ().isTrigger = false;
+					possibleItems.Add (currentlyHeldItem);
 				}
 				
 				currentlyHeldItem = null;
-			} else {
+			} else if (currentlySelectedItem) {
 				currentlyHeldItem = currentlySelectedItem;
 				currentlyHeldItem.transform.parent = itemHolder.transform;
-
-				Rigidbody2D itemRigidbody = currentlyHeldItem.GetComponent<Rigidbody2D> ();
-				if (itemRigidbody)
-					itemRigidbody.isKinematic = true;
 				currentlyHeldItem.GetComponent<Collider2D> ().isTrigger = true;
-
 				currentlyHeldItem.transform.localPosition = new Vector3 (0, 0, 0);
+				Item properties = currentlyHeldItem.GetComponent<Item> ();
+				if (properties)
+					movementModifier *= properties.speedMod;
 			}
 		}
 	}

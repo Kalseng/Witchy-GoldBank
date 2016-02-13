@@ -7,18 +7,17 @@ public class InGameGUI : MonoBehaviour {
 	public int neededGold;
 	public GameObject goldCounter;
 
+	// raw material IDs: 0 = wood, 1 = soil, 2 = human
+	private int[] hasMaterials = new int[3];
+	private static int[] materialValues = { 4, 1, 25 };
+
 	void Start() {
 
-	}
-
-	void OnGUI() { // GUI is still in 'ugly' phase
-		//GUI.Box (new Rect (0, Screen.height - 50, 200, 50), "Gold: " + gold);
 	}
 
 	public void addGold(int amount) {
 		gold += amount;
 		goldCounter.GetComponent<Text> ().text = "Gold: " + gold;
-		maybeWin ();
 	}
 
 	public void maybeWin() {
@@ -27,6 +26,18 @@ public class InGameGUI : MonoBehaviour {
 			//print ("winnn");
 			GameObject.Find ("GameManager").GetComponent<GameManager> ().WinRound ();
 		}
+	}
+
+	public void addMaterial(int materialID, int quantity) {
+		hasMaterials [materialID] += quantity;
+	}
+
+	public void convertAll() {
+		for (int i = 0; i < hasMaterials.Length; i++) {
+			addGold (hasMaterials [i] * materialValues [i]);
+			hasMaterials [i] = 0;
+		}
+		maybeWin ();
 	}
 
 }

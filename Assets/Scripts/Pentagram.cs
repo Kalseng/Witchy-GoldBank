@@ -2,25 +2,17 @@
 using System.Collections;
 
 public class Pentagram : MonoBehaviour {
-	// these arrays should all have the same length:
-	string[] itemNames = { "plant", "chair", "child" };
-	int[] itemValues = { 200, 150, 5 };
 
 	// Could be triggered by a bounds check when setting down an item
 	public void addItem (GameObject item) {
 		// print ("adding item");
-		int itemID = getID (item);
-		GameObject.Find ("InGameGUI").GetComponent<InGameGUI> ().addGold (itemValues [itemID]);
-		item.AddComponent<Disappear> ();
-	}
-
-	// not sure the best way to do this
-	int getID(GameObject item) {
-		for (int i = 0; i < itemNames.Length; i++) {
-			if (item.transform.name == itemNames [i])
-				return i;
+		Item properties = item.GetComponent<Item>();
+		for (int i = 0; i < properties.composition.Length; i++) {
+			if (properties.composition [i] > 0)
+				GameObject.Find ("InGameGUI").GetComponent<InGameGUI> ().addMaterial (i, properties.composition [i]);
 		}
-		return 0; // in case the item's name isn't found
+		GameObject.Find ("InGameGUI").GetComponent<InGameGUI> ().convertAll (); // temporary
+		item.AddComponent<Disappear> ();
 	}
 
 }
