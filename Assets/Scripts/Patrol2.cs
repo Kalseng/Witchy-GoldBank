@@ -23,6 +23,14 @@ public class Patrol2 : MonoBehaviour {
 	public float SIDE_DISTANCE;
 	private RaycastHit2D obstacle;
 	private LayerMask mask;
+	private bool adjusted = false;
+	private Transform collWithItem = null;
+	public float BACKUP_DIST;
+	private bool targetsIncrement = true;
+
+	private bool alerted = false;
+	private float alertTime;
+	public GameObject cone;
 
 	// Use this for initialization
 	void Start () {
@@ -43,31 +51,31 @@ public class Patrol2 : MonoBehaviour {
 			if (rotationTime >= rotationDuration) {
 				turning = false;
 			}
-		} else {
+		} else if (!alerted) {
 			Vector3 deltaPosition = targetPos - transform.position;
-			//print (deltaPosition.magnitude);
 			float dPMag = deltaPosition.magnitude;
 			if (dPMag <= TARGET_CLOSENESS) {
-				currentTarget++;
-				if (currentTarget >= targets.Length)
-					currentTarget = 1;
+				adjusted = false;
+				nextTarget ();
 				targetPos = targets [currentTarget].position;
 				prepRotation (targetPos);
 				return;
 			}
 
-			transform.rotation = Quaternion.LookRotation (Vector3.forward,deltaPosition);
+			transform.rotation = Quaternion.LookRotation (Vector3.forward, deltaPosition);
 			Vector3 movement = (forward.position - transform.position).normalized;
 			obstacle = Physics2D.Raycast (transform.position, movement, AVOID_DISTANCE, mask);
 			if (obstacle) {
-				print (obstacle.transform.name);
+				//print ("Avoiding " + obstacle.transform.name);
+				if (!adjusted)
+					prevTarget ();
+				adjusted = true;
 				Vector3 deltaPos = obstacle.transform.position - transform.position;
 				Vector3 avoidPosLeft = deltaPos + (right.position - transform.position) * -SIDE_DISTANCE;
 				RaycastHit2D leftTest = Physics2D.Raycast (transform.position, avoidPosLeft.normalized, avoidPosLeft.magnitude, mask);
 				if (!leftTest) {
 					avoid (avoidPosLeft);
-				}
-				else {
+				} else {
 					Vector3 avoidPosRight = deltaPos + (right.position - transform.position) * SIDE_DISTANCE;
 					RaycastHit2D rightTest = Physics2D.Raycast (transform.position, avoidPosRight.normalized, avoidPosRight.magnitude, mask);
 					if (!rightTest || rightTest.distance < leftTest.distance) {
@@ -77,17 +85,22 @@ public class Patrol2 : MonoBehaviour {
 					}
 				}
 			} else {
-			//Debug.Log ("moving");
+				//Debug.Log ("moving");
 
-			movement = movement * WALK_SPEED;
-			this.GetComponent<Rigidbody2D> ().velocity = movement;
+				movement = movement * WALK_SPEED;
+				this.GetComponent<Rigidbody2D> ().velocity = movement;
+			}
+		} else {
+			this.GetComponent<Rigidbody2D> ().velocity = Vector3.zero;
+			alertTime -= Time.deltaTime;
+			if (alertTime <= 0) {
+				alertOff ();
 			}
 		}
 	}
 
 	void avoid(Vector3 extraPoint) {
 		targetPos = extraPoint + transform.position;
-		currentTarget--;
 		prepRotation (targetPos);
 	}
 
@@ -102,6 +115,63 @@ public class Patrol2 : MonoBehaviour {
 		rotationTime = 0;
 		rotationDuration = angle / ROTATION_SPEED;
 		turning = true;
+	}
+
+	void OnCollisionEnter2D (Collision2D col) {
+		if (col.transform.gameObject.layer != 9) { // NPC Ignore Layer number
+			if (collWithItem) {
+				Vector3 badPoint = 0.5f * (collWithItem.position + col.transform.position);
+				avoid ((2 * transform.position - badPoint).normalized * BACKUP_DIST);
+				targetsIncrement = !targetsIncrement;
+			} else {
+				collWithItem = col.transform;
+			}
+		}
+		if (col.transform.CompareTag("Player")) {
+			if (col.transform.GetComponent<PlayerController> ().IsSuspicious ()) {
+				print ("What was that?");
+				alertOn(GameObject.FindWithTag ("Player").transform, false);
+			} else {
+				print ("Excuse me, m'am.");
+			}
+		}
+	}
+
+	void OnCollisionExit2D (Collision2D col) {
+		if (col.transform.gameObject.layer != 9) { // NPC Ignore Layer number
+			collWithItem = null;
+		}
+	}
+
+	void prevTarget() {
+		currentTarget += (targetsIncrement ? -1 : 1);
+		if (currentTarget >= targets.Length)
+			currentTarget = 1;
+		else if (currentTarget <= 0)
+			currentTarget = targets.Length - 1;
+	}
+
+	void nextTarget() {
+		currentTarget += (targetsIncrement ? 1 : -1);
+		if (currentTarget >= targets.Length)
+			currentTarget = 1;
+		else if (currentTarget <= 0)
+			currentTarget = targets.Length - 1;
+	}
+
+	public void alertOn (Transform player, bool red) {
+		prepRotation (player.position);
+		alerted = true;
+		transform.GetComponentInChildren<VisionCone> ().coneColor (red ? 2 : 1);
+		alertTime = 2.5f;
+	}
+
+	public void alertOff () {
+		if (alerted) {
+			prepRotation (targetPos);
+			transform.GetComponentInChildren<VisionCone> ().coneColor (0);
+			alerted = false;
+		}
 	}
 
 }
