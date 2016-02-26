@@ -31,6 +31,7 @@ public class Patrol2 : MonoBehaviour {
 	private bool alerted = false;
 	private float alertTime;
 	public GameObject cone;
+	private float NPCdebounce = 0f;
 
 	// Use this for initialization
 	void Start () {
@@ -44,6 +45,8 @@ public class Patrol2 : MonoBehaviour {
 
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (NPCdebounce > 0f)
+			NPCdebounce -= Time.deltaTime;
 		if (turning) {
 			this.GetComponent<Rigidbody2D> ().velocity = Vector3.zero;
 			rotationTime += Time.deltaTime;
@@ -118,21 +121,33 @@ public class Patrol2 : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D (Collision2D col) {
-		if (col.transform.gameObject.layer != 9) { // NPC Ignore Layer number
+		if (col.transform.gameObject.layer != 9) { // NPC Ignore Layer number is 9
 			if (collWithItem) {
 				Vector3 badPoint = 0.5f * (collWithItem.position + col.transform.position);
 				avoid ((2 * transform.position - badPoint).normalized * BACKUP_DIST);
 				targetsIncrement = !targetsIncrement;
+				print ("reversing");
 			} else {
 				collWithItem = col.transform;
 			}
 		}
-		if (col.transform.CompareTag("Player")) {
+		if (col.transform.CompareTag ("Player")) {
 			if (col.transform.GetComponent<PlayerController> ().IsSuspicious ()) {
 				print ("What was that?");
-				alertOn(GameObject.FindWithTag ("Player").transform, false);
+				alertOn (GameObject.FindWithTag ("Player").transform, false);
 			} else {
 				GetComponentInChildren<TalkBubble> ().sayThing ("Excuse me, miss.", 2.0f);
+			}
+		} else if (col.transform.CompareTag ("NPC")) {
+			if (NPCdebounce <= 0f) {
+				GetComponentInChildren<TalkBubble> ().sayThing ("Watch it!", 1.5f);
+				NPCdebounce = 3.0f;
+				Vector3 deltaPos = col.transform.position - transform.position;
+				Vector3 avoidPosLeft = deltaPos + (right.position - transform.position) * -SIDE_DISTANCE;
+				if (!adjusted)
+					prevTarget ();
+				adjusted = true;
+				avoid (avoidPosLeft);
 			}
 		}
 	}
