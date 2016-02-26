@@ -132,7 +132,7 @@ public class Patrol2 : MonoBehaviour {
 				print ("What was that?");
 				alertOn(GameObject.FindWithTag ("Player").transform, false);
 			} else {
-				print ("Excuse me, m'am.");
+				GetComponentInChildren<TalkBubble> ().sayThing ("Excuse me, miss.", 2.0f);
 			}
 		}
 	}

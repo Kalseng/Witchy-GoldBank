@@ -34,6 +34,7 @@ public class VisionCone : MonoBehaviour {
 			if (alertLevel >= ALERT_THRESHOLD) {
 				print ("Suspicion level critical");
 				transform.parent.parent.GetComponent<Patrol2> ().alertOn (player, true);
+				transform.parent.parent.GetComponentInChildren<TalkBubble> ().sayThing ("What do you think you're doing?", 2.0f);
 				GameObject.Find ("GameManager").GetComponent<GameManager> ().GameOver ();
 			}
 		}
