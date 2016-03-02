@@ -33,6 +33,8 @@ public class Patrol2 : MonoBehaviour {
 	public GameObject cone;
 	private float NPCdebounce = 0f;
 
+	private static string[] NOTICE_MESSAGES = {"What're you doing?", "Excuse me? Miss?", "Where're you going with that?"};
+
 	// Use this for initialization
 	void Start () {
 		targets = targetSet.GetComponentsInChildren<Transform> ();
@@ -133,7 +135,7 @@ public class Patrol2 : MonoBehaviour {
 		}
 		if (col.transform.CompareTag ("Player")) {
 			if (col.transform.GetComponent<PlayerController> ().IsSuspicious ()) {
-				print ("What was that?");
+				//print ("What was that?");
 				alertOn (GameObject.FindWithTag ("Player").transform, false);
 			} else {
 				GetComponentInChildren<TalkBubble> ().sayThing ("Excuse me, miss.", 2.0f);
@@ -179,6 +181,7 @@ public class Patrol2 : MonoBehaviour {
 		alerted = true;
 		transform.GetComponentInChildren<VisionCone> ().coneColor (red ? 2 : 1);
 		alertTime = 2.5f;
+		GetComponentInChildren<TalkBubble> ().sayThing (NOTICE_MESSAGES [(int)(Random.value * 3)], 1f);
 	}
 
 	public void alertOff () {
