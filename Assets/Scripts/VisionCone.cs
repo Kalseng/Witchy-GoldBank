@@ -44,7 +44,7 @@ public class VisionCone : MonoBehaviour {
 		if (maybePlayer.gameObject.CompareTag ("PlayerCollider") && !maybePlayer.isTrigger) {
 			seesPlayer = true;
 		} else if (maybePlayer.gameObject.CompareTag ("Item") && maybePlayer.isTrigger) {
-			transform.parent.parent.GetComponent<Patrol2> ().alertOn (maybePlayer.transform, false);
+			transform.parent.parent.GetComponent<Patrol2> ().alertOn (player, false);
 		}
 	}
 

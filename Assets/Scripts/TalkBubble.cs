@@ -6,7 +6,7 @@ public class TalkBubble : MonoBehaviour {
 	public Material opaqueBubble;
 	public Material transparentBubble;
 	private bool isVisible = false;
-	private float timeLeft;
+	public float timeLeft = 0;
 	
 	// Update is called once per frame
 	void Update () {

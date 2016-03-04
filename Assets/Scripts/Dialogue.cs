@@ -63,14 +63,26 @@ public class Dialogue : MonoBehaviour {
 		currentDialogueQuotes = quotes;
 		currentDialogueSpeakers = speakers;
 		talking = true;
-		nextQuote ();
-		talkingTo.GetComponent<TalkIdentity> ().startTalk ();
+		//nextQuote ();
+		if (talkingTo.GetComponent<Patrol2>())
+			talkingTo.GetComponent<Patrol2> ().talkFreeze = true;
+		if (talkingTo.GetComponent<Rigidbody2D> ())
+			talkingTo.GetComponent<Rigidbody2D> ().isKinematic = true;
+		if (talkingTo.GetComponentInChildren<TalkBubble> ())
+			talkingTo.GetComponentInChildren<TalkBubble> ().timeLeft = 0;
+		GetComponent<PlayerController> ().talkFreeze = true;
+		GetComponent<Rigidbody2D> ().isKinematic = true;
 	}
 
 	public void endTalk() {
 		talking = false;
 		debounce = 0.2f;
-		talkingTo.GetComponent<TalkIdentity> ().endTalk ();
+		if (talkingTo.GetComponent<Patrol2>())
+			talkingTo.GetComponent<Patrol2> ().talkFreeze = false;
+		if (talkingTo.GetComponent<Rigidbody2D> ())
+			talkingTo.GetComponent<Rigidbody2D> ().isKinematic = false;
+		GetComponent<PlayerController> ().talkFreeze = false;
+		GetComponent<Rigidbody2D> ().isKinematic = false;
 		talkingTo = null;
 		GameObject.Find ("InGameGUI").GetComponent<InGameGUI> ().hideChatBar ();
 	}

@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour {
 	private GameObject pentagram;
 	private double minPentagramDistance;
 
+	public bool talkFreeze = false;
+
 	// Use this for initialization
 	void Start () {
 		possibleItems = new ArrayList ();
@@ -32,9 +34,11 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		InputManager ();
-		ItemManager ();
-		TalkManager ();
+		if (!talkFreeze) {
+			InputManager ();
+			ItemManager ();
+			TalkManager ();
+		}
 	}
 
 	void InputManager(){

@@ -33,6 +33,8 @@ public class Patrol2 : MonoBehaviour {
 	public GameObject cone;
 	private float NPCdebounce = 0f;
 
+	public bool talkFreeze = false;
+
 	private static string[] NOTICE_MESSAGES = {"What're you doing?", "Excuse me? Miss?", "Where're you going with that?"};
 
 	// Use this for initialization
@@ -47,6 +49,8 @@ public class Patrol2 : MonoBehaviour {
 
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (talkFreeze)
+			return;
 		if (NPCdebounce > 0f)
 			NPCdebounce -= Time.deltaTime;
 		if (turning) {
