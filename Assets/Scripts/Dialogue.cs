@@ -32,11 +32,16 @@ public class Dialogue : MonoBehaviour {
 				break;
 			case Person.STOCK:
 				int randomQuote = Random.Range (0, NPC_MESSAGES.Length);
-				string[] onlyQuote = new string[1];
-				onlyQuote [0] = NPC_MESSAGES [randomQuote];
-				Person[] onlySpeaker = new Person[1];
-				onlySpeaker [0] = Person.STOCK;
-				startTalk (onlyQuote, onlySpeaker);
+				string message = NPC_MESSAGES [randomQuote];
+				int divider = message.IndexOf ('&');
+				if (divider != -1) { // two-liner
+					body.GetComponentInChildren<TalkBubble> ().talkSkip = true;
+					body.GetComponentInChildren<TalkBubble> ().sayThing2 (message.Substring (0, divider),
+						message.Substring (divider + 1), 3);
+				}
+				else // one-liner
+					body.GetComponentInChildren<TalkBubble> ().sayThing (message, 3);
+				talkingTo = null;
 				break;
 			}
 		}
