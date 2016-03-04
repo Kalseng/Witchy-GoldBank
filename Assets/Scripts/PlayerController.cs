@@ -50,9 +50,13 @@ public class PlayerController : MonoBehaviour {
 				pickUpItem ();
 		}
 		if (Input.GetButtonDown ("Fire2") && currentlySelectedNPC) { // talk to nearby NPC
-			TalkIdentity talk = currentlySelectedNPC.GetComponent<TalkIdentity>();
-			if (talk) {
-				GetComponent<Dialogue>().talkTo (talk.identity, currentlySelectedNPC);
+			if (IsSuspicious () && currentlySelectedNPC.GetComponent<Patrol2>()) {
+				currentlySelectedNPC.GetComponent<Patrol2> ().alertOn (transform, false);
+			} else {
+				TalkIdentity talk = currentlySelectedNPC.GetComponent<TalkIdentity> ();
+				if (talk) {
+					GetComponent<Dialogue> ().talkTo (talk.identity, currentlySelectedNPC);
+				}
 			}
 		}
 	}

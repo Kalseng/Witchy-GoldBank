@@ -70,4 +70,8 @@ public class VisionCone : MonoBehaviour {
 			break;
 		}
 	}
+
+	public bool isRed() {
+		return transform.parent.GetComponent<SpriteRenderer> ().sprite == badCone;
+	}
 }

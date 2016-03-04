@@ -181,6 +181,8 @@ public class Patrol2 : MonoBehaviour {
 	}
 
 	public void alertOn (Transform player, bool red) {
+		if (!red && transform.GetComponentInChildren<VisionCone> ().isRed ())
+			return;
 		prepRotation (player.position);
 		alerted = true;
 		transform.GetComponentInChildren<VisionCone> ().coneColor (red ? 2 : 1);
