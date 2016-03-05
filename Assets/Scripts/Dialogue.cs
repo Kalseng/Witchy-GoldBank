@@ -31,17 +31,20 @@ public class Dialogue : MonoBehaviour {
 				print ("talk to chad");
 				break;
 			case Person.STOCK:
-				int randomQuote = Random.Range (0, NPC_MESSAGES.Length);
-				string message = NPC_MESSAGES [randomQuote];
-				int divider = message.IndexOf ('&');
-				if (divider != -1) { // two-liner
-					body.GetComponentInChildren<TalkBubble> ().talkSkip = true;
-					body.GetComponentInChildren<TalkBubble> ().sayThing2 (message.Substring (0, divider),
-						message.Substring (divider + 1), 3);
+				debounce = 0.2f;
+				TalkBubble bubble = talkingTo.GetComponentInChildren<TalkBubble> ();
+				if (bubble.followUp.Length != 0) // say second part of two-liner
+					bubble.sayFollowUp ();
+				else {
+					int randomQuote = Random.Range (0, NPC_MESSAGES.Length);
+					string message = NPC_MESSAGES [randomQuote];
+					int divider = message.IndexOf ('&');
+					if (divider != -1) // start two-liner
+						bubble.sayThing (message.Substring (0, divider), 3, true, message.Substring (divider + 1));
+					else // say one-liner
+						bubble.sayThing (message, 3, true, "");
+					talkingTo = null;
 				}
-				else // one-liner
-					body.GetComponentInChildren<TalkBubble> ().sayThing (message, 3);
-				talkingTo = null;
 				break;
 			}
 		}

@@ -142,11 +142,11 @@ public class Patrol2 : MonoBehaviour {
 				//print ("What was that?");
 				alertOn (GameObject.FindWithTag ("Player").transform, false);
 			} else {
-				GetComponentInChildren<TalkBubble> ().sayThing ("Excuse me, miss.", 2.0f);
+				GetComponentInChildren<TalkBubble> ().sayThing ("Excuse me, miss.", 2.0f, false, "");
 			}
 		} else if (col.transform.CompareTag ("NPC")) {
 			if (NPCdebounce <= 0f) {
-				GetComponentInChildren<TalkBubble> ().sayThing ("Watch it!", 1.5f);
+				GetComponentInChildren<TalkBubble> ().sayThing ("Watch it!", 1.5f, false, "");
 				NPCdebounce = 3.0f;
 				Vector3 deltaPos = col.transform.position - transform.position;
 				Vector3 avoidPosLeft = deltaPos + (right.position - transform.position) * -SIDE_DISTANCE;
@@ -187,7 +187,7 @@ public class Patrol2 : MonoBehaviour {
 		alerted = true;
 		transform.GetComponentInChildren<VisionCone> ().coneColor (red ? 2 : 1);
 		alertTime = 2.5f;
-		GetComponentInChildren<TalkBubble> ().sayThing (NOTICE_MESSAGES [(int)(Random.value * 3)], 1f);
+		GetComponentInChildren<TalkBubble> ().sayThing (NOTICE_MESSAGES [(int)(Random.value * 3)], 1f, false, "");
 	}
 
 	public void alertOff () {

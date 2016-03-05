@@ -7,8 +7,8 @@ public class TalkBubble : MonoBehaviour {
 	public Material transparentBubble;
 	private bool isVisible = false;
 	public float timeLeft = 0;
-	private string followUp = "";
-	public bool talkSkip = false;
+	public string followUp = "";
+	private bool hold = false;
 	
 	// Update is called once per frame
 	void Update () {
@@ -17,13 +17,13 @@ public class TalkBubble : MonoBehaviour {
 			timeLeft -= Time.deltaTime;
 			if (timeLeft < 0) {
 				if (followUp.Length == 0) {
+					hold = false;
 					isVisible = false;
 					GetComponent<SpriteRenderer> ().enabled = false;
 					GetComponentInChildren<Text> ().text = "";
 				} else {
-					string temp = followUp;
-					followUp = "";
-					sayThing (temp, 3);
+					sayFollowUp ();
+					print ("time up");
 				}
 			}
 		}
@@ -41,14 +41,12 @@ public class TalkBubble : MonoBehaviour {
 			GetComponent<SpriteRenderer> ().material = opaqueBubble;
 	}
 
-	public void sayThing(string thing, float duration) {
-		if (followUp.Length != 0) {
-			if (talkSkip) {
-				timeLeft = 0;
-				talkSkip = false;
-			}
+	public void sayThing(string thing, float duration, bool toHold, string thing2) {
+		if (followUp.Length != 0 || hold)
 			return;
-		}
+		if (thing2.Length != 0)
+			followUp = thing2;
+		hold = toHold;
 		transform.parent.rotation = Quaternion.identity;
 		isVisible = true;
 		timeLeft = duration;
@@ -56,12 +54,10 @@ public class TalkBubble : MonoBehaviour {
 		GetComponent<SpriteRenderer> ().enabled = true;
 	}
 
-	public void sayThing2(string thing, string thing2, float duration) { // thing with a follow up (punchline?)
-		followUp = thing2;
-		transform.parent.rotation = Quaternion.identity;
-		isVisible = true;
-		timeLeft = duration;
-		GetComponentInChildren<Text> ().text = thing;
-		GetComponent<SpriteRenderer> ().enabled = true;
+	public void sayFollowUp() {
+		string temp = followUp;
+		followUp = "";
+		hold = false;
+		sayThing (temp, 3, true, "");
 	}
 }
