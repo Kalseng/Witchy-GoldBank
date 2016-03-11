@@ -8,7 +8,7 @@ public class Patrol2 : MonoBehaviour {
 	private int currentTarget = 1; // ignore #0, since that will be the parent of the actual targets
 	private Vector3 targetPos;
 	public float WALK_SPEED;
-	public float TARGET_CLOSENESS;
+	public float TARGET_CLOSENESS; // how close to the target is sufficient for targeting the next one
 	private Transform forward;
 	private Transform right;
 
@@ -19,13 +19,14 @@ public class Patrol2 : MonoBehaviour {
 	private float rotationTime;
 	private float rotationDuration;
 
-	public float AVOID_DISTANCE;
-	public float SIDE_DISTANCE;
+	public float AVOID_DISTANCE; // deals with raycasting obstacle avoidance
+	public float SIDE_DISTANCE; // deals with setting avoidance target
 	private RaycastHit2D obstacle;
 	private LayerMask mask;
 	private bool adjusted = false;
 	private Transform collWithItem = null;
-	public float BACKUP_DIST;
+	public float BACKUP_DIST; // deals only with reversing direction when caught between objects
+	public float MIN_APPROACH; // deals only with moving toward player when alerted
 	private bool targetsIncrement = true;
 
 	private bool alerted = false;
@@ -34,6 +35,7 @@ public class Patrol2 : MonoBehaviour {
 	private float NPCdebounce = 0f;
 
 	public bool talkFreeze = false;
+	private bool approach = false;
 
 	private static string[] NOTICE_MESSAGES = {"What're you doing?", "Excuse me? Miss?", "Where're you going with that?"};
 
@@ -59,8 +61,11 @@ public class Patrol2 : MonoBehaviour {
 			transform.rotation = Quaternion.Lerp (fromRotation, toRotation, rotationTime / rotationDuration);
 			if (rotationTime >= rotationDuration) {
 				turning = false;
+				if (alerted && (GameObject.FindWithTag ("Player").transform.position - transform.position).magnitude > MIN_APPROACH) {
+					// move forward and approach
+				}
 			}
-		} else if (!alerted) {
+		} else if (!alerted || approach) {
 			Vector3 deltaPosition = targetPos - transform.position;
 			float dPMag = deltaPosition.magnitude;
 			if (dPMag <= TARGET_CLOSENESS) {
@@ -78,6 +83,10 @@ public class Patrol2 : MonoBehaviour {
 				//print ("Avoiding " + obstacle.transform.name);
 				if (!adjusted)
 					prevTarget ();
+				if (alerted) {
+					alertOff();
+					approach = false;
+				}
 				adjusted = true;
 				Vector3 deltaPos = obstacle.transform.position - transform.position;
 				Vector3 avoidPosLeft = deltaPos + (right.position - transform.position) * -SIDE_DISTANCE;

@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour {
 	private double minPentagramDistance;
 
 	public bool talkFreeze = false;
+	public int inCones = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -133,6 +134,8 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void setDownItem() {
+		if (inCones != 0)
+			return;
 		currentlyHeldItem.transform.parent = itemFolder.transform;
 		while (possibleItems.Contains(currentlyHeldItem)) // in case the item is in possibleItems multiple times (bugfix)
 			possibleItems.Remove (currentlyHeldItem);
