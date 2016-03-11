@@ -34,7 +34,7 @@ public class VisionCone : MonoBehaviour {
 			if (alertLevel >= ALERT_THRESHOLD) {
 				print ("Suspicion level critical");
 				transform.parent.parent.GetComponent<Patrol2> ().alertOn (player, true);
-				transform.parent.parent.GetComponentInChildren<TalkBubble> ().sayThing ("It's a witch!", 2.0f, true, "");
+				transform.parent.parent.GetComponentInChildren<TalkBubble> ().sayThing ("It's a witch!", 2.0f, true, "", true);
 				GameObject.Find ("GameManager").GetComponent<GameManager> ().GameOver ();
 			}
 		}

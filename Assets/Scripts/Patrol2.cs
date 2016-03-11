@@ -61,9 +61,7 @@ public class Patrol2 : MonoBehaviour {
 			transform.rotation = Quaternion.Lerp (fromRotation, toRotation, rotationTime / rotationDuration);
 			if (rotationTime >= rotationDuration) {
 				turning = false;
-				if (alerted && (GameObject.FindWithTag ("Player").transform.position - transform.position).magnitude > MIN_APPROACH) {
-					// move forward and approach
-				}
+				considerApproach ();
 			}
 		} else if (!alerted || approach) {
 			Vector3 deltaPosition = targetPos - transform.position;
@@ -72,7 +70,12 @@ public class Patrol2 : MonoBehaviour {
 				adjusted = false;
 				nextTarget ();
 				targetPos = targets [currentTarget].position;
-				prepRotation (targetPos);
+				if (!alerted)
+					prepRotation (targetPos);
+				else {
+					approach = false;
+					considerApproach ();
+				}
 				return;
 			}
 
@@ -117,12 +120,33 @@ public class Patrol2 : MonoBehaviour {
 		}
 	}
 
+	void considerApproach() {
+		float distanceToPlayer = (GameObject.FindWithTag ("Player").transform.position - transform.position).magnitude;
+		if (alerted && distanceToPlayer > MIN_APPROACH) {
+			if (!GameObject.FindWithTag ("Player").GetComponent<PlayerController> ().IsSuspicious ()) {
+				approach = false;
+				alertOff ();
+				return;
+			}
+			// move forward and approach
+			approach = true;
+			if (!adjusted)
+				prevTarget ();
+			adjusted = true;
+			targetPos = (forward.position - transform.position) * (distanceToPlayer - MIN_APPROACH) * 2 + transform.position;
+		}
+	}
+
 	void avoid(Vector3 extraPoint) {
 		targetPos = extraPoint + transform.position;
 		prepRotation (targetPos);
 	}
 
+	private int nprep = 0;
+
 	void prepRotation (Vector3 toPos) {
+		print ("prep" + nprep);
+		nprep++;
 		this.GetComponent<Rigidbody2D> ().velocity = Vector3.zero;
 
 		Vector3 deltaPosition = toPos - transform.position;
@@ -155,6 +179,8 @@ public class Patrol2 : MonoBehaviour {
 			}
 		} else if (col.transform.CompareTag ("NPC")) {
 			if (NPCdebounce <= 0f) {
+				approach = false;
+				alertOff ();
 				GetComponentInChildren<TalkBubble> ().sayThing ("Watch it!", 1.5f, false, "");
 				NPCdebounce = 3.0f;
 				Vector3 deltaPos = col.transform.position - transform.position;
@@ -196,7 +222,7 @@ public class Patrol2 : MonoBehaviour {
 		alerted = true;
 		transform.GetComponentInChildren<VisionCone> ().coneColor (red ? 2 : 1);
 		alertTime = 2.5f;
-		GetComponentInChildren<TalkBubble> ().sayThing (NOTICE_MESSAGES [(int)(Random.value * 3)], 1f, false, "");
+		GetComponentInChildren<TalkBubble> ().sayThing (NOTICE_MESSAGES [(int)(Random.value * 3)], 1f, true, "");
 	}
 
 	public void alertOff () {

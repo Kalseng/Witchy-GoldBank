@@ -41,11 +41,13 @@ public class TalkBubble : MonoBehaviour {
 			GetComponent<SpriteRenderer> ().material = opaqueBubble;
 	}
 
-	public void sayThing(string thing, float duration, bool toHold, string thing2) {
-		if (followUp.Length != 0 || hold)
-			return;
-		if (thing2.Length != 0)
-			followUp = thing2;
+	public void sayThing(string thing, float duration, bool toHold, string thing2, bool superImportant = false) {
+		if (!superImportant) {
+			if (followUp.Length != 0 || hold)
+				return;
+			if (thing2.Length != 0)
+				followUp = thing2;
+		}
 		hold = toHold;
 		transform.parent.rotation = Quaternion.identity;
 		isVisible = true;
