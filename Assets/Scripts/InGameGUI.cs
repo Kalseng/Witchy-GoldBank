@@ -12,6 +12,9 @@ public class InGameGUI : MonoBehaviour {
 	private int[] hasMaterials = new int[3];
 	private static int[] MATERIAL_VALUES = { 4, 1, 25 };
 	private Hashtable NPCnames = new Hashtable();
+	public GameObject PONZ_PORTRAIT;
+	public GameObject CHAD_PORTRAIT;
+	public GameObject WITCH_PORTRAIT;
 
 	void Start() {
 		NPCnames [Person.CHAD] = "Chad";
@@ -46,8 +49,11 @@ public class InGameGUI : MonoBehaviour {
 	}
 
 	public void chatBarQuote(string quote, Person speaker) {
-		chatBar.GetComponent<Text> ().text = NPCnames [speaker] + ": " + quote;
+		chatBar.GetComponent<Text> ().text = "<b>" + NPCnames [speaker] + ":</b> " + quote;
 		chatBar.transform.parent.gameObject.SetActive (true);
+		PONZ_PORTRAIT.SetActive (speaker == Person.PONZ);
+		CHAD_PORTRAIT.SetActive (speaker == Person.CHAD);
+		WITCH_PORTRAIT.SetActive (speaker == Person.WITCH);
 	}
 
 	public void hideChatBar() {
