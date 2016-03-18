@@ -79,6 +79,7 @@ public class Dialogue : MonoBehaviour {
 		if (talkingTo.GetComponentInChildren<TalkBubble> ())
 			talkingTo.GetComponentInChildren<TalkBubble> ().timeLeft = 0;
 		GetComponent<PlayerController> ().talkFreeze = true;
+		GetComponent<Rigidbody2D> ().isKinematic = true;
 	}
 
 	public void endTalk() {
