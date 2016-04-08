@@ -51,6 +51,11 @@ public class InGameGUI : MonoBehaviour {
 	public void chatBarQuote(string quote, Person speaker) {
 		chatBar.GetComponent<Text> ().text = "<b>" + NPCnames [speaker] + ":</b> " + quote;
 		chatBar.transform.parent.gameObject.SetActive (true);
+		goldCounter.transform.parent.gameObject.SetActive (false);
+		if (Camera.main.WorldToScreenPoint (GameObject.FindGameObjectWithTag ("Player").transform.position).y < Screen.height * 0.3f)
+			print ("top"); // move canvas to top of screen somehow
+		else
+			print ("bottom"); // move canvas to bottom of screen somehow
 		PONZ_PORTRAIT.SetActive (speaker == Person.PONZ);
 		CHAD_PORTRAIT.SetActive (speaker == Person.CHAD);
 		WITCH_PORTRAIT.SetActive (speaker == Person.WITCH);
@@ -58,6 +63,7 @@ public class InGameGUI : MonoBehaviour {
 
 	public void hideChatBar() {
 		chatBar.transform.parent.gameObject.SetActive (false);
+		goldCounter.transform.parent.gameObject.SetActive (true);
 	}
 
 }

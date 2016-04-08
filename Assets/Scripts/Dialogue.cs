@@ -71,7 +71,7 @@ public class Dialogue : MonoBehaviour {
 		currentDialogueQuotes = quotes;
 		currentDialogueSpeakers = speakers;
 		talking = true;
-		//nextQuote ();
+		nextQuote ();
 		if (talkingTo.GetComponent<Patrol2>())
 			talkingTo.GetComponent<Patrol2> ().talkFreeze = true;
 		if (talkingTo.GetComponent<Rigidbody2D> ())

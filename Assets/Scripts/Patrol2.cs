@@ -145,7 +145,7 @@ public class Patrol2 : MonoBehaviour {
 	private int nprep = 0;
 
 	void prepRotation (Vector3 toPos) {
-		print ("prep" + nprep);
+		//print ("prep" + nprep);
 		nprep++;
 		this.GetComponent<Rigidbody2D> ().velocity = Vector3.zero;
 
@@ -165,7 +165,7 @@ public class Patrol2 : MonoBehaviour {
 				Vector3 badPoint = 0.5f * (collWithItem.position + col.transform.position);
 				avoid ((2 * transform.position - badPoint).normalized * BACKUP_DIST);
 				targetsIncrement = !targetsIncrement;
-				print ("reversing");
+				//print ("reversing");
 			} else {
 				collWithItem = col.transform;
 			}

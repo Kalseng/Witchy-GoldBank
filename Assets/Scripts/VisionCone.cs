@@ -41,9 +41,10 @@ public class VisionCone : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D maybePlayer) {
+		if (maybePlayer.gameObject.CompareTag ("PlayerCollider"))
+			player.GetComponent<PlayerController> ().inCones++;
 		if (maybePlayer.gameObject.CompareTag ("PlayerCollider") && !maybePlayer.isTrigger) {
 			seesPlayer = true;
-			player.GetComponent<PlayerController> ().inCones++;
 		} else if (maybePlayer.gameObject.CompareTag ("Item") && maybePlayer.isTrigger) {
 			transform.parent.parent.GetComponent<Patrol2> ().alertOn (player, false);
 		}

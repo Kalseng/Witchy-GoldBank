@@ -166,17 +166,13 @@ public class PlayerController : MonoBehaviour {
 		if (col.tag == "Item") {
 			possibleItems.Remove (col.gameObject);
 		} else if (col.tag == "NPC") {
-			possibleNPCs.Remove (col.gameObject);
+			while (possibleNPCs.Contains(col.gameObject))
+				possibleNPCs.Remove (col.gameObject);
 		}
 	}
 
 	public bool IsSuspicious(){
-		if (currentlyHeldItem != null) {
-			return true;
-		}
-
-
-		return false;
+		return currentlyHeldItem != null;
 	}
 
 }
