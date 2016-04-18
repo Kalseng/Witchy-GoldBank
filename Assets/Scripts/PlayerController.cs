@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour {
 			currentlySelectedItem = closestItem;
 		}
 		if (currentlySelectedItem != null) {
-			Debug.Log (currentlySelectedItem.name);
+			//Debug.Log (currentlySelectedItem.name);
 		}
 	}
 

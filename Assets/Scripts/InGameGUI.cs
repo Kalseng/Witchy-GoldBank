@@ -16,11 +16,11 @@ public class InGameGUI : MonoBehaviour {
 	public GameObject CHAD_PORTRAIT;
 	public GameObject WITCH_PORTRAIT;
 
-	void Start() {
+	public void initNames() {
 		NPCnames [Person.CHAD] = "Chad";
 		NPCnames [Person.PONZ] = "Pon Z Dragon";
 		NPCnames [Person.STOCK] = "Peasant";
-		NPCnames [Person.WITCH] = "Whatever the witch's name is";
+		NPCnames [Person.WITCH] = "Witch";
 	}
 
 	public void addGold(int amount) {
@@ -62,7 +62,16 @@ public class InGameGUI : MonoBehaviour {
 	}
 
 	public void hideChatBar() {
+		hideChatBar (true);
+	}
+
+	public void hideChatBar(bool affectGoldCounter) {
 		chatBar.transform.parent.gameObject.SetActive (false);
+		if (affectGoldCounter)
+			showGold ();
+	}
+
+	public void showGold() {
 		goldCounter.transform.parent.gameObject.SetActive (true);
 	}
 

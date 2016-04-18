@@ -31,5 +31,6 @@ public class GameManager : MonoBehaviour {
 		InGameGUI guiCode = GameObject.Find("InGameGUI").GetComponent<InGameGUI> ();
 		guiCode.neededGold = endGold;
 		guiCode.addGold (startGold);
+		guiCode.showGold ();
 	}
 }
