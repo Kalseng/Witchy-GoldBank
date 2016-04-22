@@ -16,6 +16,11 @@ public class InGameGUI : MonoBehaviour {
 	public GameObject CHAD_PORTRAIT;
 	public GameObject WITCH_PORTRAIT;
 
+	public GameObject chatBar2;
+	public GameObject PONZ_PORTRAIT2;
+	public GameObject CHAD_PORTRAIT2;
+	public GameObject WITCH_PORTRAIT2;
+
 	public void initNames() {
 		NPCnames [Person.CHAD] = "Chad";
 		NPCnames [Person.PONZ] = "Pon Z Dragon";
@@ -49,16 +54,23 @@ public class InGameGUI : MonoBehaviour {
 	}
 
 	public void chatBarQuote(string quote, Person speaker) {
-		chatBar.GetComponent<Text> ().text = "<b>" + NPCnames [speaker] + ":</b> " + quote;
-		chatBar.transform.parent.gameObject.SetActive (true);
 		goldCounter.transform.parent.gameObject.SetActive (false);
-		if (Camera.main.WorldToScreenPoint (GameObject.FindGameObjectWithTag ("Player").transform.position).y < Screen.height * 0.3f)
-			print ("top"); // move canvas to top of screen somehow
-		else
-			print ("bottom"); // move canvas to bottom of screen somehow
-		PONZ_PORTRAIT.SetActive (speaker == Person.PONZ);
-		CHAD_PORTRAIT.SetActive (speaker == Person.CHAD);
-		WITCH_PORTRAIT.SetActive (speaker == Person.WITCH);
+		if (Camera.main.WorldToScreenPoint (GameObject.FindGameObjectWithTag ("Player").transform.position).y > Screen.height * 0.3f) {
+			chatBar.GetComponent<Text> ().text = "<b>" + NPCnames [speaker] + ":</b> " + quote;
+			chatBar.transform.parent.gameObject.SetActive (true);
+			chatBar2.transform.parent.gameObject.SetActive (false);
+			PONZ_PORTRAIT.SetActive (speaker == Person.PONZ);
+			CHAD_PORTRAIT.SetActive (speaker == Person.CHAD);
+			WITCH_PORTRAIT.SetActive (speaker == Person.WITCH);
+		} else {
+			print (chatBar2);
+			chatBar2.GetComponent<Text> ().text = "<b>" + NPCnames [speaker] + ":</b> " + quote;
+			chatBar2.transform.parent.gameObject.SetActive (true);
+			chatBar.transform.parent.gameObject.SetActive (false);
+			PONZ_PORTRAIT2.SetActive (speaker == Person.PONZ);
+			CHAD_PORTRAIT2.SetActive (speaker == Person.CHAD);
+			WITCH_PORTRAIT2.SetActive (speaker == Person.WITCH);
+		}
 	}
 
 	public void hideChatBar() {
@@ -67,6 +79,7 @@ public class InGameGUI : MonoBehaviour {
 
 	public void hideChatBar(bool affectGoldCounter) {
 		chatBar.transform.parent.gameObject.SetActive (false);
+		chatBar2.transform.parent.gameObject.SetActive (false);
 		if (affectGoldCounter)
 			showGold ();
 	}
