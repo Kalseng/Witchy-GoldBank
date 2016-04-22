@@ -58,7 +58,7 @@ public class Dialogue : MonoBehaviour {
 		else if (talking && Input.GetButtonDown ("Fire2"))
 			nextQuote ();
 		else if (Input.GetKeyDown ("p")) {
-			quoteNumber = 38;
+			quoteNumber = 37;
 			nextQuote ();
 		}
 	}
