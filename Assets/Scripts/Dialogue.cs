@@ -8,6 +8,10 @@ public class Dialogue : MonoBehaviour {
 	public Person[] CHAT_PONZ_2_SPEAKER;
 	public string[] INTRO_TEXT_QUOTE;
 	public Person[] INTRO_TEXT_SPEAKER;
+	public string[] CHAT_CHAD_1_QUOTE;
+	public Person[] CHAT_CHAD_1_SPEAKER;
+	public string[] CHAT_CHAD_2_QUOTE;
+	public Person[] CHAT_CHAD_2_SPEAKER;
 	public string[] NPC_MESSAGES;
 
 	private bool talking = false;
@@ -21,16 +25,19 @@ public class Dialogue : MonoBehaviour {
 	public void talkTo(Person who, GameObject body) {
 		if (!talking && debounce <= 0f) {
 			talkingTo = body;
+			int randomDialogue = Random.Range (0, 2);
 			switch (who) {
 			case Person.PONZ:
-				int randomDialogue = Random.Range (0, 2);
 				if (randomDialogue == 0)
 					startTalk (CHAT_PONZ_1_QUOTE, CHAT_PONZ_1_SPEAKER);
 				else
 					startTalk (CHAT_PONZ_2_QUOTE, CHAT_PONZ_2_SPEAKER);
 				break;
 			case Person.CHAD:
-				print ("talk to chad");
+				if (randomDialogue == 0)
+					startTalk (CHAT_CHAD_1_QUOTE, CHAT_CHAD_1_SPEAKER);
+				else
+					startTalk (CHAT_CHAD_2_QUOTE, CHAT_CHAD_2_SPEAKER);
 				break;
 			case Person.STOCK:
 				debounce = 0.2f;
