@@ -4,7 +4,7 @@ using System.Collections;
 public class Disappear : MonoBehaviour {
 
 	private Vector3 originalScale;
-	private float DISAPPEAR_TIME = 1.0f;
+	private float DISAPPEAR_TIME = 0.5f;
 	private float timeLeft;
 	public bool lastOne;
 

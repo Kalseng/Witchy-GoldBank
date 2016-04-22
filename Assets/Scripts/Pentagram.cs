@@ -13,6 +13,7 @@ public class Pentagram : MonoBehaviour {
 		}
 		GameObject.Find ("InGameGUI").GetComponent<InGameGUI> ().convertAll (); // temporary
 		item.AddComponent<Disappear> ();
+		GetComponent<AudioSource> ().Play ();
 	}
 
 }
