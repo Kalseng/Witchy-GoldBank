@@ -57,6 +57,10 @@ public class Dialogue : MonoBehaviour {
 			debounce -= Time.deltaTime;
 		else if (talking && Input.GetButtonDown ("Fire2"))
 			nextQuote ();
+		else if (Input.GetKeyDown ("p")) {
+			quoteNumber = 38;
+			nextQuote ();
+		}
 	}
 
 	public void nextQuote() {
