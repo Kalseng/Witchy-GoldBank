@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Pentagram : MonoBehaviour {
 
+	public ParticleSystem smoke;
+
 	// Could be triggered by a bounds check when setting down an item
 	public void addItem (GameObject item) {
 		// print ("adding item");
@@ -14,6 +16,7 @@ public class Pentagram : MonoBehaviour {
 		GameObject.Find ("InGameGUI").GetComponent<InGameGUI> ().convertAll (); // temporary
 		item.AddComponent<Disappear> ();
 		GetComponent<AudioSource> ().Play ();
+		smoke.Play ();
 	}
 
 }
