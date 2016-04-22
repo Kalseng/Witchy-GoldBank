@@ -121,9 +121,7 @@ public class Dialogue : MonoBehaviour {
 		print ("scene event");
 		switch (thingHappens) {
 		case "chad_appears":
-			print ("chad appears, yay.");
-			talking = true;
-			nextQuote ();
+			GameObject.Find ("chad").GetComponent<ChadAppears> ().begin ();
 			break;
 		case "turn_ponz":
 			print ("PonZ turns, yay.");
@@ -141,6 +139,11 @@ public class Dialogue : MonoBehaviour {
 			GameObject.Find ("GameManager").GetComponent<GameManager> ().StartRound (1000, 1039);
 			break;
 		}
+	}
+
+	public void endSceneEvent() {
+		talking = true;
+		nextQuote ();
 	}
 }
 
