@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
 
 	public void WinRound(){
 		Debug.Log ("ROUND WON");
-		Time.timeScale = 0;
+		SceneManager.LoadScene ("Win Screen");
 	}
 
 	// to be called after level is loaded?
