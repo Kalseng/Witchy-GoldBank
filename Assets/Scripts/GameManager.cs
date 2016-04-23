@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameManager : MonoBehaviour {
@@ -15,7 +16,7 @@ public class GameManager : MonoBehaviour {
 
 	public void GameOver(){
 		Debug.Log ("GAME OVER");
-		Time.timeScale = 0;
+		SceneManager.LoadScene ("GameOver");
 	}
 
 	public void WinRound(){
