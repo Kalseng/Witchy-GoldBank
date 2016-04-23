@@ -25,7 +25,7 @@ public class InGameGUI : MonoBehaviour {
 		NPCnames [Person.CHAD] = "Chad";
 		NPCnames [Person.PONZ] = "Pon Z Dragon";
 		NPCnames [Person.STOCK] = "Peasant";
-		NPCnames [Person.WITCH] = "Witch";
+		NPCnames [Person.WITCH] = "Golda";
 	}
 
 	public void addGold(int amount) {
