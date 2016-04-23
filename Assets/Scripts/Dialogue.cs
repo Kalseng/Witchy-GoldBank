@@ -123,9 +123,7 @@ public class Dialogue : MonoBehaviour {
 			GameObject.Find ("chad").GetComponent<ChadAppears> ().begin ();
 			break;
 		case "turn_ponz":
-			print ("PonZ turns, yay.");
-			talking = true;
-			nextQuote ();
+			GetComponent<turnBack> ().begin ();
 			break;
 		case "none":
 			print ("do nothing!");
