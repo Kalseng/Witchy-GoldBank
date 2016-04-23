@@ -64,8 +64,17 @@ public class Dialogue : MonoBehaviour {
 			debounce -= Time.deltaTime;
 		else if (talking && Input.GetButtonDown ("Fire2"))
 			nextQuote ();
-		else if (Input.GetKeyDown ("p")) {
+		else if (currentDialogueQuotes == INTRO_TEXT_QUOTE && Input.GetKeyDown ("p")) {
 			quoteNumber = 37;
+			GameObject.Find ("chad").GetComponent<SpriteRenderer> ().enabled = true;
+			GameObject.Find ("ponz").transform.position = GameObject.Find ("newPos").transform.position;
+			GameObject.Find ("ponz").transform.rotation = GameObject.Find ("newPos").transform.rotation;
+			if (GameObject.Find ("ponz").GetComponent<ponzMove> () != null)
+				Destroy (GameObject.Find ("ponz").GetComponent<ponzMove> ());
+			if (GameObject.Find ("chad").GetComponent<ChadAppears> () != null)
+				Destroy (GameObject.Find ("chad").GetComponent<ChadAppears> ());
+			if (GetComponent<turnBack> () != null)
+				Destroy (GetComponent<turnBack> ());
 			nextQuote ();
 		}
 	}
@@ -131,6 +140,7 @@ public class Dialogue : MonoBehaviour {
 			nextQuote ();
 			break;
 		case "start_game":
+			GameObject.Find ("ponz").GetComponent<ponzMove> ().begin ();
 			endTalk ();
 			GameObject.Find ("GameManager").GetComponent<GameManager> ().StartRound (1000, 1039);
 			break;
