@@ -71,8 +71,8 @@ public class Dialogue : MonoBehaviour {
 			GameObject.Find ("chad").GetComponent<SpriteRenderer> ().enabled = true;
 			GameObject.Find ("ponz").transform.position = GameObject.Find ("newPos").transform.position;
 			GameObject.Find ("ponz").transform.rotation = GameObject.Find ("newPos").transform.rotation;
-			if (GameObject.Find ("ponz").GetComponent<ponzMove> () != null)
-				Destroy (GameObject.Find ("ponz").GetComponent<ponzMove> ());
+			/*if (GameObject.Find ("ponz").GetComponent<ponzMove> () != null)
+				Destroy (GameObject.Find ("ponz").GetComponent<ponzMove> ());*/
 			if (GameObject.Find ("chad").GetComponent<ChadAppears> () != null)
 				Destroy (GameObject.Find ("chad").GetComponent<ChadAppears> ());
 			if (GetComponent<turnBack> () != null)
