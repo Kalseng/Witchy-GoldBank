@@ -11,6 +11,7 @@ public class ponzMove : MonoBehaviour {
 	public void begin () {
 		begun = true;
 		smoke.Play ();
+		GetComponent<Renderer> ().enabled = false;
 	}
 
 	// Update is called once per frame
@@ -20,6 +21,7 @@ public class ponzMove : MonoBehaviour {
 			if (elapsedTime > 0.3f) {
 				transform.position = newPos.position;
 				transform.rotation = newPos.rotation;
+				GetComponent<Renderer> ().enabled = true;
 				smoke.Play ();
 				//Destroy (smoke.gameObject);
 				Destroy (GetComponent<ponzMove> ());
