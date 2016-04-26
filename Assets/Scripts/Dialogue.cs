@@ -12,6 +12,8 @@ public class Dialogue : MonoBehaviour {
 	public Person[] CHAT_CHAD_1_SPEAKER;
 	public string[] CHAT_CHAD_2_QUOTE;
 	public Person[] CHAT_CHAD_2_SPEAKER;
+	public string[] WIN_TEXT_QUOTE;
+	public Person[] WIN_TEXT_SPEAKER;
 	public string[] NPC_MESSAGES;
 
 	private bool talking = false;
@@ -142,7 +144,11 @@ public class Dialogue : MonoBehaviour {
 		case "start_game":
 			GameObject.Find ("ponz").GetComponent<ponzMove> ().begin ();
 			endTalk ();
-			GameObject.Find ("GameManager").GetComponent<GameManager> ().StartRound (1000, 1039);
+			GameObject.Find ("GameManager").GetComponent<GameManager> ().StartRound (1000, 1450);
+			break;
+		case "win_screen":
+			endTalk ();
+			GameObject.Find ("GameManager").GetComponent<GameManager> ().ToWinScreen ();
 			break;
 		}
 	}

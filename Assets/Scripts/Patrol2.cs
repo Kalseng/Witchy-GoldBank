@@ -6,7 +6,7 @@ public class Patrol2 : MonoBehaviour {
 	private Transform[] targets;
 
 	private int currentTarget = 1; // ignore #0, since that will be the parent of the actual targets
-	private Vector3 targetPos;
+	public Vector3 targetPos;
 	public float WALK_SPEED;
 	public float TARGET_CLOSENESS; // how close to the target is sufficient for targeting the next one
 	private Transform forward;
@@ -46,6 +46,7 @@ public class Patrol2 : MonoBehaviour {
 		right = transform.Find ("right");
 		mask = ~LayerMask.GetMask("NPC Ignore");
 		targetPos = targets [currentTarget].position;
+		clampTargetPos ();
 		prepRotation (targetPos);
 	}
 
@@ -70,6 +71,7 @@ public class Patrol2 : MonoBehaviour {
 				adjusted = false;
 				nextTarget ();
 				targetPos = targets [currentTarget].position;
+				clampTargetPos ();
 				if (!alerted)
 					prepRotation (targetPos);
 				else {
@@ -134,12 +136,34 @@ public class Patrol2 : MonoBehaviour {
 				prevTarget ();
 			adjusted = true;
 			targetPos = (forward.position - transform.position) * (distanceToPlayer - MIN_APPROACH) * 2 + transform.position;
+			clampTargetPos ();
 		}
 	}
 
 	void avoid(Vector3 extraPoint) {
 		targetPos = extraPoint + transform.position;
+		clampTargetPos ();
 		prepRotation (targetPos);
+	}
+
+	void clampTargetPos() { // make sure NPCs stay within certain bounds
+		GameObject topleft = GameObject.FindWithTag ("NPCBound_topleft");
+		GameObject bottomright = GameObject.FindWithTag ("NPCBound_bottomright");
+		if (topleft == null || bottomright == null)
+			print ("ASDFHU;WAEJ");
+		float rad = GetComponent<CircleCollider2D> ().radius;
+		if (topleft != null) {
+			if (targetPos.y + rad > topleft.transform.position.y)
+				targetPos.y = topleft.transform.position.y - rad;
+			if (targetPos.x - rad < topleft.transform.position.x)
+				targetPos.x = topleft.transform.position.x + rad;
+		}
+		if (bottomright != null) {
+			if (targetPos.y - rad < bottomright.transform.position.y)
+				targetPos.y = bottomright.transform.position.y + rad;
+			if (targetPos.x + rad > bottomright.transform.position.x)
+				targetPos.x = bottomright.transform.position.x - rad;
+		}
 	}
 
 	private int nprep = 0;

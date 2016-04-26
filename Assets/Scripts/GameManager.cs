@@ -19,8 +19,15 @@ public class GameManager : MonoBehaviour {
 		SceneManager.LoadScene ("GameOver");
 	}
 
-	public void WinRound(){
+	public void WinRound(int gold){
 		Debug.Log ("ROUND WON");
+		Dialogue d = GameObject.FindWithTag ("Player").GetComponent<Dialogue>();
+		d.WIN_TEXT_QUOTE [1] = "$" + gold + ".";
+		d.startTalk (d.WIN_TEXT_QUOTE, d.WIN_TEXT_SPEAKER);
+		//SceneManager.LoadScene ("Win Screen"); // this is called from ToWinScene now
+	}
+
+	public void ToWinScreen() {
 		SceneManager.LoadScene ("Win Screen");
 	}
 

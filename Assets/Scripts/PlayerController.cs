@@ -134,8 +134,10 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void setDownItem() {
-		if (inCones != 0)
+		if (inCones != 0) {
+			print ("incones: " + inCones);
 			return;
+		}
 		currentlyHeldItem.transform.parent = itemFolder.transform;
 		while (possibleItems.Contains(currentlyHeldItem)) // in case the item is in possibleItems multiple times (bugfix)
 			possibleItems.Remove (currentlyHeldItem);

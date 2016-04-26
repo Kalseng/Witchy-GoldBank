@@ -10,7 +10,7 @@ public class InGameGUI : MonoBehaviour {
 
 	// raw material IDs: 0 = wood, 1 = soil, 2 = human
 	private int[] hasMaterials = new int[3];
-	private static int[] MATERIAL_VALUES = { 4, 1, 25 };
+	private static int[] MATERIAL_VALUES = { 50, 30, 90 };
 	private Hashtable NPCnames = new Hashtable();
 	public GameObject PONZ_PORTRAIT;
 	public GameObject CHAD_PORTRAIT;
@@ -37,7 +37,7 @@ public class InGameGUI : MonoBehaviour {
 		//print ("maybe win");
 		if (gold >= neededGold) {
 			//print ("winnn");
-			GameObject.Find ("GameManager").GetComponent<GameManager> ().WinRound ();
+			GameObject.Find ("GameManager").GetComponent<GameManager> ().WinRound (gold);
 		}
 	}
 
@@ -63,7 +63,7 @@ public class InGameGUI : MonoBehaviour {
 			CHAD_PORTRAIT.SetActive (speaker == Person.CHAD);
 			WITCH_PORTRAIT.SetActive (speaker == Person.WITCH);
 		} else {
-			print (chatBar2);
+			//print (chatBar2);
 			chatBar2.GetComponent<Text> ().text = "<b>" + NPCnames [speaker] + ":</b> " + quote;
 			chatBar2.transform.parent.gameObject.SetActive (true);
 			chatBar.transform.parent.gameObject.SetActive (false);

@@ -13,6 +13,8 @@ public class VisionCone : MonoBehaviour {
 	private Sprite medCone;
 	private Sprite badCone;
 
+	private bool playerIn = false;
+
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag ("Player").transform;
@@ -41,8 +43,13 @@ public class VisionCone : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D maybePlayer) {
-		if (maybePlayer.gameObject.CompareTag ("PlayerCollider"))
-			player.GetComponent<PlayerController> ().inCones++;
+		//print ("enter: " + maybePlayer.gameObject.transform.name);
+		if (maybePlayer.gameObject.CompareTag ("PlayerCollider")) {
+			//print ("increment, incones = " + player.GetComponent<PlayerController>().inCones);
+			if (!playerIn)
+				player.GetComponent<PlayerController> ().inCones++;
+			playerIn = true;
+		}
 		if (maybePlayer.gameObject.CompareTag ("PlayerCollider") && !maybePlayer.isTrigger) {
 			seesPlayer = true;
 		} else if (maybePlayer.gameObject.CompareTag ("Item") && maybePlayer.isTrigger) {
@@ -51,9 +58,13 @@ public class VisionCone : MonoBehaviour {
 	}
 
 	void OnTriggerExit2D (Collider2D maybePlayer) {
+		//print ("exit: " + maybePlayer.gameObject.transform.name);
 		if (maybePlayer.gameObject.CompareTag ("PlayerCollider")) {
 			seesPlayer = false;
-			player.GetComponent<PlayerController> ().inCones--;
+			if (playerIn)
+				player.GetComponent<PlayerController> ().inCones--;
+			playerIn = false;
+			//print ("decrement, incones = " + player.GetComponent<PlayerController>().inCones);
 			if (player.GetComponent<PlayerController>().IsSuspicious())
 				transform.parent.parent.GetComponent<Patrol2> ().alertOn (player, false);
 			alertLevel = 0f;

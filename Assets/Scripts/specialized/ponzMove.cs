@@ -5,7 +5,6 @@ public class ponzMove : MonoBehaviour {
 	private float elapsedTime = 0f;
 	private bool begun = false;
 	public ParticleSystem smoke;
-	private bool step1 = false;
 	public Transform newPos;
 
 	// Use this for initialization
